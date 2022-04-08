@@ -320,7 +320,11 @@ $.nette.ext('validation', {
 				var ie = this.ie();
 				notValid = (analyze.form.get(0).onsubmit && analyze.form.get(0).onsubmit((typeof ie !== 'undefined' && ie < 9) ? undefined : e) === false);
 			} else { // Nette 2.4 and up
-				notValid = ((analyze.form.get(0).onsubmit ? analyze.form.triggerHandler('submit') : Nette.validateForm(analyze.form.get(0))) === false)
+				if (analyze.form.get(0).getAttribute('novalidate') === 'novalidate') {
+					notValid = false;
+				} else {
+					notValid = ((analyze.form.get(0).onsubmit ? analyze.form.triggerHandler('submit') : Nette.validateForm(analyze.form.get(0))) === false);
+				}
 			}
 			if (notValid) {
 				e.stopImmediatePropagation();
